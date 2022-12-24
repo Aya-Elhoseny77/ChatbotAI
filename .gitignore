@@ -1,129 +1,183 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# you can use this AI to make a research or to go to youjtube or google withouit touching the pc and you can make him tell you some jokes  
+import pyttsx3                          # text to speech 
+import speech_recognition as sr         # speech to text 
+import datetime
+# to know the time 
+#import wikipedia                        # to searching on wikipedia
+import webbrowser                        # to connect to the browser
+import time 
+import os                                 # provide a portable way of using operating system dependent functionality 
+import smtplib                            # to send mail to any internet machine with stmp listener  
+import shutil                             # to get terminal size and arrange colums 
+import pyjokes                            # to tell me a rondom joke from liber.
+import json
 
-# C extensions
-*.so
+engine = pyttsx3.init('sapi5')                           # start pyttsx3 
+voices = engine.getProperty('voices')                      #using voice and preper it 
+# print(voices[1].id) 
+engine.setProperty('voice', voices[1].id)                                                   # using female voice you can change the  [1] to [0] if you want a male sound 
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+def speak(audio):                                                               # define the speak & audio function                       
+    engine.say(audio)                                                            # make the engine ready to say the commends 
+    engine.runAndWait()                                                   # to rrun the commund and wait for the another commund from user 
+    
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+# define wish me function to make the AI can welcome me acording to time 
+def wishMe():
+    hour = int(datetime.datetime.now().hour)
+    if 0 <= hour < 12:
+        speak("Good Morning!")
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
+    elif 12 <= hour < 18:
+        speak("Good Afternoon!")
 
-# Translations
-*.mo
-*.pot
+    else:
+        speak("Good Evening!")
+ 
+# the AI say his name to make you know him         
+assname =("NAANOO ")
+speak("I AM your chatbot freind....Nice to meet you....My name is")
+speak(assname)
+# to make AI know the user name 
+def username():
+    speak("What should i call you?")
+    uname = takeCommand()
+    speak("Welcome")
+    speak(uname)
+    columns = shutil.get_terminal_size().columns
+     
+    print("#####################".center(columns))
+    print("Welcome", uname.center(columns))
+    print("#####################".center(columns))
+     
+    speak("How can i Help you,")
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+def takeCommand():                     
 
-# Flask stuff:
-instance/
-.webassets-cache
+# to makee the mic. as a source to take a command from user 
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        r.pause_threshold = 1
+        audio = r.listen(source)
 
-# Scrapy stuff:
-.scrapy
+    try:
+        print("Recognizing...")             # to make the user know that the AI is recognize the command 
+        query = r.recognize_google(audio, language='en-in')          # the language that AI can understand 
+        
+        print(f"User said: {query}\n")                                # to print what the user said 
 
-# Sphinx documentation
-docs/_build/
+    except Exception as error:                                              # from the errors coula catch is to don't understand what you said 
+        # print(e)
+        print("Say that again please...")
+        return "None"
+    return query
 
-# PyBuilder
-target/
+# define the function that responsable For sending e-mails 
+def sendEmail(to, content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login('youremail@gmail.com', 'your-password')
+    server.sendmail('youremail@gmail.com', to, content)
+    server.close()
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# writing the main function for the AI 
+if __name__ == "__main__":
+    clear = lambda: os.system('cls')
+    
+clear()
+wishMe()
+username()
 
-# IPython
-profile_default/
-ipython_config.py
+while True:              # begain to take the command from user
+        
+        query = takeCommand().lower()
+    # to search in wikipedia               
+        # Logic for executing tasks based on query
+        if 'wikipedia' in query:
+            speak('Searching Wikipedia...')
+            query = query.replace("wikipedia", "")
+#          results = wikipedia.summary(query, sentences=2)
+            speak("According to Wikipedia")
+                    #print(results)
+#         speak(results)
+# to open youtube 
+        elif 'open youtube' in query:
+            speak("Here you go to Youtube\n")
+            webbrowser.open("youtube.com")
+#to open google 
+        elif 'open google' in query:
+            speak("Here you go to Google\n")
+            webbrowser.open("google.com")
 
-# pyenv
-.python-version
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
+            
+            
+    
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
+# to tell you the time at this moment        
+       
+            
+        elif 'the time' in query:
+                strTime = datetime.datetime.now().strftime("% H:% M:% S")   
+                speak(f"the time is {strTime}")    
+                
+        elif 'the time' in query:
+                strTime = datetime.datetime.now().strftime("% H:% M:% S")   
+                speak(f"the time is {strTime}")    
+                
+                    
+                    
+                    
+                    
+                    # if you want to change the AI name's 
+                    
+        elif "change name" in query:
+                speak("What would you like to call me")
+                asname = takeCommand()
+                speak("Thanks for naming me")    
+        
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
+        
+        
+        
+        
+        # if you wanna finish the converstion with the AI 
+                
+        elif 'exit' in query or "bye" in query:
+            speak("Thanks for giving me your time. i hope you are happy")
+            exit()
+            # if you wanna to know who creat this AI
+        elif "who made you" in query or "who created you" in query:
+            speak("I am developed by Aya Ahmed")                
+            
+       
+            # to talk with the AI freindly 
+        elif 'how are you' in query:
+            speak("I am fine, Thank you")
+            speak("How are you,")
+ 
+        elif 'fine' in query or "good" in query:
+            speak("It's good to know that your fine") 
+            
+        elif 'thanks' in query or "thank you" in query:
+            speak("you are welcome sir. hope you a good day")     
+            
+            
+         
+            
+        elif 'joke' in query:
+                speak(pyjokes.get_joke())     
+        
+        elif 'search' in query :
+            speak("i will do it now for you sir")
+             
+            query = query.replace("search", "")
+            query = query.replace("play", "")         
+            webbrowser.open(query)        
+            
+        elif "who am I?" in query:
+              speak("If you talk then definitely you are human. by the way i talk but i am not human")
+ 
